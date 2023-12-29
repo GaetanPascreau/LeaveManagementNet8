@@ -1,5 +1,7 @@
 using LeaveManagementNet8.Web.Configurations;
+using LeaveManagementNet8.Web.Contracts;
 using LeaveManagementNet8.Web.Data;
+using LeaveManagementNet8.Web.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +21,9 @@ namespace LeaveManagementNet8.Web
 
             builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
 
             builder.Services.AddAutoMapper(typeof(MapperConfig));
 
