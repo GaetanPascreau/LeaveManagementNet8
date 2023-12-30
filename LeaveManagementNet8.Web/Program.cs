@@ -2,7 +2,9 @@ using LeaveManagementNet8.Web.Configurations;
 using LeaveManagementNet8.Web.Contracts;
 using LeaveManagementNet8.Web.Data;
 using LeaveManagementNet8.Web.Repositories;
+using LeaveManagementNet8.Web.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementNet8.Web
@@ -20,7 +22,10 @@ namespace LeaveManagementNet8.Web
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddTransient<IEmailSender>(s => new EmailSender("localhost", 25, "no-reply@leavemanagement.com"));
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
