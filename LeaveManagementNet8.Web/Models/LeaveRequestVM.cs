@@ -1,7 +1,4 @@
-﻿using LeaveManagementNet8.Web.Data;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.InteropServices;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LeaveManagementNet8.Web.Models
 {
@@ -10,6 +7,8 @@ namespace LeaveManagementNet8.Web.Models
         public int Id { get; set; }
 
         [Display(Name = "Date Requested")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DataType(DataType.Date)]
         public DateTime DateRequested { get; set; }
 
         [Display(Name = "Leave Type")]
@@ -22,6 +21,6 @@ namespace LeaveManagementNet8.Web.Models
 
         public string? RequestingEmployeeId { get; set; }
 
-        public EmployeeListVM Employee {  get; set; }
+        public EmployeeListVM Employee { get; set; }
     }
 }

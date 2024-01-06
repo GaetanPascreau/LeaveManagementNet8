@@ -3,8 +3,6 @@ using LeaveManagementNet8.Web.Constants;
 using LeaveManagementNet8.Web.Contracts;
 using LeaveManagementNet8.Web.Data;
 using LeaveManagementNet8.Web.Models;
-using LeaveManagementNet8.Web.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -63,13 +61,13 @@ namespace LeaveManagementNet8.Web.Controllers
         {
             try
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
-                    if(await _leaveAllocationRepository.UpdateEmployeeAllocation(model))
+                    if (await _leaveAllocationRepository.UpdateEmployeeAllocation(model))
                     {
                         return RedirectToAction(nameof(ViewAllocations), new { id = model.EmployeeId });
-                    }         
-                }       
+                    }
+                }
             }
             catch (Exception ex)
             {

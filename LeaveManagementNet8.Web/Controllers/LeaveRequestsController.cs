@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LeaveManagementNet8.Web.Constants;
+using LeaveManagementNet8.Web.Contracts;
+using LeaveManagementNet8.Web.Data;
+using LeaveManagementNet8.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using LeaveManagementNet8.Web.Data;
-using LeaveManagementNet8.Web.Models;
-using AutoMapper;
-using LeaveManagementNet8.Web.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using LeaveManagementNet8.Web.Constants;
 
 namespace LeaveManagementNet8.Web.Controllers
 {
@@ -32,7 +27,7 @@ namespace LeaveManagementNet8.Web.Controllers
         // GET: LeaveRequests
         public async Task<IActionResult> Index()
         {
-           var model = await _leaveRequestrepository.GetAdminLeaveRequestList();
+            var model = await _leaveRequestrepository.GetAdminLeaveRequestList();
             return View(model);
         }
 
@@ -76,7 +71,7 @@ namespace LeaveManagementNet8.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>  Cancel(int id)
+        public async Task<IActionResult> Cancel(int id)
         {
             try
             {
