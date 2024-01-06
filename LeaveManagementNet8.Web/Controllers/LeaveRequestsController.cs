@@ -14,13 +14,16 @@ namespace LeaveManagementNet8.Web.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILeaveRequestRepository _leaveRequestrepository;
+        private readonly ILogger<LeaveRequestsController> _logger;
 
         public LeaveRequestsController(
             ApplicationDbContext context,
-            ILeaveRequestRepository leaveRequestrepository)
+            ILeaveRequestRepository leaveRequestrepository,
+            ILogger<LeaveRequestsController> logger)
         {
             _context = context;
             _leaveRequestrepository = leaveRequestrepository;
+            _logger = logger;
         }
 
         [Authorize(Roles = Roles.Administrator)]
@@ -62,7 +65,7 @@ namespace LeaveManagementNet8.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Error Approving Leave Request.");
                 throw;
             }
 
@@ -79,7 +82,7 @@ namespace LeaveManagementNet8.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Error Cancelling Leave Request.");
                 throw;
             }
             return RedirectToAction(nameof(MyLeave));
@@ -115,9 +118,9 @@ namespace LeaveManagementNet8.Web.Controllers
                     ModelState.AddModelError(string.Empty, "You have exceeded yopur allocation with this request.");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Error Creating Leave Request.");
                 ModelState.AddModelError(string.Empty, "An Error Has Occured. Please Try Again Later.");
             }
 
