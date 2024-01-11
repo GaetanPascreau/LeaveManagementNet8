@@ -1,4 +1,4 @@
-using LeaveManagementNet8.Web.Models;
+using LeaveManagementNet8.Common.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

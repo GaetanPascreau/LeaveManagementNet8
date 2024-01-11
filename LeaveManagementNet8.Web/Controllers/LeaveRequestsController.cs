@@ -1,11 +1,11 @@
-﻿using LeaveManagementNet8.Web.Constants;
-using LeaveManagementNet8.Web.Contracts;
-using LeaveManagementNet8.Web.Data;
-using LeaveManagementNet8.Web.Models;
+﻿using LeaveManagementNet8.Common.Constants;
+using LeaveManagementNet8.Data;
+using LeaveManagementNet8.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using LeaveManagementNet8.Application.Contracts;
 
 namespace LeaveManagementNet8.Web.Controllers
 {

@@ -1,7 +1,7 @@
-using LeaveManagementNet8.Web.Configurations;
-using LeaveManagementNet8.Web.Contracts;
-using LeaveManagementNet8.Web.Data;
-using LeaveManagementNet8.Web.Repositories;
+using LeaveManagementNet8.Application.Configurations;
+using LeaveManagementNet8.Application.Contracts;
+using LeaveManagementNet8.Data;
+using LeaveManagementNet8.Application.Repositories;
 using LeaveManagementNet8.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
