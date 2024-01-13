@@ -4,7 +4,7 @@
     ViewData["Title"] = "ViewAllocations";
 }
 
-<h1>View Allocations for @Model.FirstName @Model.LastName</h1>
+<h1>Allocations pour @Model.FirstName @Model.LastName</h1>
 
 <div>
 
@@ -39,14 +39,14 @@
 <hr />
 <div class="card">
     <div class="card-header">
-        <h4>Leave Allocations</h4>
+        <h4>Allocation des congés</h4>
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <div class="row">
-                <div class="col">Leave Name</div>
-                <div class="col">Original Allocation</div>
-                <div class="col">Current Allocation</div>
+                <div class="col">Type de congés</div>
+                <div class="col">Allocation originale (jours)</div>
+                <div class="col">Allocation actuelle (jours)</div>
                 <div class="col">Action</div>
             </div>
         </li>
@@ -59,16 +59,17 @@
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary">
-                            Allocated Days <span class="badge bg-secondary">@allocation.LeaveType.DefaultDays</span>
+                            Jours alloués <span class="badge bg-secondary">@allocation.LeaveType.DefaultDays</span>
                         </button>
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary">
-                            Remaining Days <span class="badge bg-secondary">@allocation.NumberOfDays</span>
+                            Jours restants <span class="badge bg-secondary">@allocation.NumberOfDays</span>
                         </button>
                     </div>
                     <div class="col">
-                        <a class="btn btn-warning" asp-action="EditAllocation" asp-route-id="@allocation.Id"><i class="fa-solid fa-pencil"></i></a>
+                        <a class="btn btn-warning" asp-action="EditAllocation" asp-route-id="@allocation.Id">
+                            <i class="fa-solid fa-pencil"></i></a>
                     </div>
                 </div>
             </li>
@@ -77,5 +78,5 @@
 </div>
 <br />
 <div>
-    <a asp-action="Index" class="btn btn-dark">Back to List</a>
+    <a asp-action="Index" class="btn btn-dark">Retour à la liste</a>
 </div>

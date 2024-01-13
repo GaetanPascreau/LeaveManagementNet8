@@ -12,18 +12,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="keywords"
-          content="leave management, .net 8, .net core, complete asp.net and entity framework development ">
+          content="leave management, .net 8, .net core, complete asp.net and entity framework development, gestion des congés">
     <meta name="description"
-          content="Educational Project for .NET8 Development">
+          content="Leave Management Solution for Sogescot, as an Educational Training using .NET8">
     <meta name="robots" content="noindex,nofollow">
 
-    <title>@ViewData["Title"] - Leave Management System</title>
+    <title>@ViewData["Title"] - Gestion des congés</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  <!--ajouté pour afficher un datepicker en Français-->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeaveManagementNet8.Web.styles.css" asp-append-version="true" />
 
@@ -76,7 +76,7 @@
                         <!--End Logo icon -->
                         <!-- Logo text -->
                         <span class="logo-text">
-                            Leave Management Web
+                            Gestion des congés
                         </span>
                     </a>
                     <!-- ============================================================== -->
@@ -176,7 +176,7 @@
                                     <button type="submit" class="btn d-block w-100 create-btn text-white no-block d-flex align-items-center">
                                         <i class="fa fa-power-off m-r-5 m-l-5"></i>
                                         &nbsp; &nbsp;
-                                        <span>Logout</span>
+                                        <span>Déconnexion</span>
                                     </button>
                                 </form>
                             </li>
@@ -187,14 +187,14 @@
                                 <a class="btn btn-block w-100 create-btn text-white no-block d-flex align-items-center" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">  
                                     <i class="fas fa-portrait"></i>
                                     &nbsp; &nbsp;
-                                    <span>Register</span>     
+                                    <span>Inscription</span>     
                                 </a>
                             </li>
                             <li class="p-15 m-t-10">
                                 <a class="btn btn-block w-100 create-btn text-white no-block d-flex align-items-center" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                     <i class="fas fa-user"></i>
                                     &nbsp; &nbsp;
-                                    <span>Login</span>    
+                                    <span>Connexion</span>    
                                 </a>
                             </li>
                             }
@@ -206,43 +206,47 @@
                            <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="fa-solid fa-house"></i>
                                 &nbsp; &nbsp;
-                               <span>Home</span>
+                               <span>Accueil</span>
                            </a>
                         </li>
-                        @if (User.IsInRole(Roles.User))
+                        @if (User.IsInRole(Roles.User) && !User.IsInRole(Roles.Supervisor))
                         {
 
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Create">
                                     <i class="fa-solid fa-pencil"></i>
-                                    <span>Apply For Leave</span>
+                                    <span>Poser des congés</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="MyLeave">
                                     <i class="fa-regular fa-file-lines"></i>
-                                    <span>My Leave</span>
+                                    <span>Mes congés</span>
                                 </a>
                             </li>
                         }
+
+                         @* Ajouter un if statement pour : la gestion du compte particuler du superviseur, et pour la gestion des congés de l'équipe par un Superviseur *@
+
                         @if (User.IsInRole(Roles.Administrator))
                         {
+                            
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="Employees" asp-action="Index">
                                     <i class="fa-solid fa-users"></i>
-                                    <span>Employees</span>
+                                    <span>Employés</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveTypes" asp-action="Index">
                                     <i class="fa-solid fa-gears"></i>
-                                    <span>Leave Types</span>
+                                    <span>Types de congés</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Index">
                                     <i class="fa-solid fa-list-check"></i>
-                                    <span>Leave Requests</span>
+                                    <span>Demandes de congés</span>
                                 </a>
                             </li>
                         }       

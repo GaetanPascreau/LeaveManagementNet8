@@ -44,14 +44,17 @@ namespace LeaveManagementNet8.Application.Repositories
 
         public async Task<EmployeeAllocationVM> GetEmployeeAllocations(string employeeId)
         {
+            // Get the list of allocations by leave type (with its details) for the given employee
             var allocations = await _context.LeaveAllocations
                 .Include(q => q.LeaveType)
                 .Where(q => q.EmployeeId == employeeId)
                 .ProjectTo<LeaveAllocationVM>(_configurationProvider)
                 .ToListAsync();
 
+            // Get all informations about the employee
             var employee = await _userManager.FindByIdAsync(employeeId);
 
+            // Combine these info to display them in the model
             var employeeAllocationModel = _mapper.Map<EmployeeAllocationVM>(employee);
             employeeAllocationModel.leaveAllocations = allocations;
 
@@ -109,8 +112,9 @@ namespace LeaveManagementNet8.Application.Repositories
 
             foreach (var employee in employeeWithNewLeaveAllocations) 
             {
-                await _emailSender.SendEmailAsync(employee.Email, $"Leave Allocation Posted for {period}", $"Your {leaveType.Name} " +
-                $"has been posted for the period of {period}. You have been given {leaveType.DefaultDays} days.");
+                await _emailSender.SendEmailAsync(employee.Email, $"Allocation des congés pour {period}",
+                    $"Vos {leaveType.Name} " +
+                $"ont été postés pour la pério de {period}. {leaveType.DefaultDays} jours vous ont été attribués.");
             }
         }
 

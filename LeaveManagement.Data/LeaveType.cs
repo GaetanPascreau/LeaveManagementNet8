@@ -4,6 +4,6 @@
     {
         public string Name { get; set; }
 
-        public int DefaultDays { get; set; }
+        public double DefaultDays { get; set; }
     }
 }

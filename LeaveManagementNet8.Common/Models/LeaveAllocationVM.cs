@@ -7,12 +7,12 @@ namespace LeaveManagementNet8.Common.Models
         [Required]
         public int Id { get; set; }
 
-        [Display(Name = "Number Of Days")]
+        [Display(Name = "Nombre de jours")]
         [Required]
-        [Range(1,50, ErrorMessage = "Invalid Number Entered")]
-        public int NumberOfDays { get; set; }
+        [Range(1,50, ErrorMessage = "Veuillez entrer un nombre valide.")]
+        public double NumberOfDays { get; set; }
 
-        [Display(Name = "Allocation Period")]
+        [Display(Name = "Période d'allocation")]
         [Required]
         public int Period { get; set; }
 

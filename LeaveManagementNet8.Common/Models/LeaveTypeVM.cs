@@ -6,13 +6,13 @@ namespace LeaveManagementNet8.Common.Models
     {
         public int Id { get; set; }
 
-        [Display(Name = "Leave Type Name")]
+        [Display(Name = "Type de congés")]
         [Required]
         public string Name { get; set; }
 
-        [Display(Name = "Default Number Of Days")]
+        [Display(Name = "Nombre de jours par défaut")]
         [Required]
-        [Range(1,25, ErrorMessage = "Please enter a valid number.")]
-        public int DefaultDays { get; set; }
+        [Range(1,25, ErrorMessage = "Veuillez entrer un nombre valide.")]
+        public double DefaultDays { get; set; }
     }
 }

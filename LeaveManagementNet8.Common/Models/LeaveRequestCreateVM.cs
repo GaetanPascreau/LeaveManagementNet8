@@ -6,35 +6,45 @@ namespace LeaveManagementNet8.Common.Models
     public class LeaveRequestCreateVM : IValidatableObject
     {
         [Required]
-        [Display(Name = "Start Date")]
+        [Display(Name = "Date de début")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         [DataType(DataType.Date)]
         public DateTime? StartDate { get; set; }
 
+        [Required(ErrorMessage = "Veuillez choisir une heure de début.")]
+        [Display(Name = "Heure de début")]
+        public string StartTime { get; set; }
+
         [Required]
-        [Display(Name = "End Date")]
+        [Display(Name = "Date de fin")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
 
-        [Required]
-        [Display(Name = "Leave Type")]
+        [Required(ErrorMessage = "Veuillez choisir une heure de fin.")]
+        [Display(Name = "Heure de fin")]
+        public string EndTime { get; set; }
+
+        [Required(ErrorMessage = "Veuillez sélectionner un type de congés.")]
+        [Display(Name = "Type de congés")]
         public int LeaveTypeId { get; set; }
         public SelectList? LeaveTypes { get; set; }
 
-        [Display(Name = "Request Comments")]
+        [Display(Name = "Commentaires")]
         public string? RequestComments { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (StartDate > EndDate)
             {
-                yield return new ValidationResult("The Start Date Must Be Before The End Date.", new[] { nameof(StartDate), nameof(EndDate) });
+                yield return new ValidationResult("La date de début doit être antérieure à la date de fin.",
+                    new[] { nameof(StartDate), nameof(EndDate) });
             }
 
             if (RequestComments?.Length > 250)
             {
-                yield return new ValidationResult("Comments are too long", new[] { nameof(RequestComments) });
+                yield return new ValidationResult("Le commentaire est rop long.",
+                    new[] { nameof(RequestComments) });
             }
         }
     }

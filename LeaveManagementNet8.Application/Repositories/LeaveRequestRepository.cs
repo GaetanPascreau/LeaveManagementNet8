@@ -18,6 +18,7 @@ namespace LeaveManagementNet8.Application.Repositories
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<Employee> _userManager;
         private readonly ILeaveAllocationRepository _leaveAllocationRepository;
+        private readonly ILeaveTypeRepository _leaveTypeRepository;
         private readonly IEmailSender _emailSender;
 
         public LeaveRequestRepository(
@@ -27,6 +28,7 @@ namespace LeaveManagementNet8.Application.Repositories
             IHttpContextAccessor httpContextAccessor,
             UserManager<Employee> userManager,
             ILeaveAllocationRepository leaveAllocationRepository,
+            ILeaveTypeRepository leaveTypeRepository,
             IEmailSender emailSender) : base(context)
         {
             _context = context;
@@ -35,6 +37,7 @@ namespace LeaveManagementNet8.Application.Repositories
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _leaveAllocationRepository = leaveAllocationRepository;
+            _leaveTypeRepository = leaveTypeRepository;
             _emailSender = emailSender;
         }
 
@@ -44,10 +47,17 @@ namespace LeaveManagementNet8.Application.Repositories
             leaveRequest.Cancelled = true;
             await UpdateAsync(leaveRequest);
 
+            // Get the employee's Id to send the Email
             var user = await _userManager.FindByIdAsync(leaveRequest.RequestingEmployeeId);
 
-            await _emailSender.SendEmailAsync(user.Email, "Leave Request cancelled", $"Your leave request from " +
-               $"{leaveRequest.StartDate} to {leaveRequest.EndDate} has been cancelled successfully.");
+            // Set the properties that where not provided by the user
+            leaveRequest.LeaveType = await _leaveTypeRepository.GetAsync(leaveRequest.LeaveTypeId);
+
+            await _emailSender.SendEmailAsync(user.Email, $"Demande de {leaveRequest.LeaveType.Name} annulée",
+                $"Votre demande de {leaveRequest.LeaveType.Name} du " +
+               $"{leaveRequest.StartDate.ToString("dd/MM/yyyy")} ({leaveRequest.StartTime})" +
+               $" au {leaveRequest.EndDate.ToString("dd/MM/yyyy")} ({leaveRequest.EndTime})" +
+               $" a été annulée avec succès.");
         }
 
         public async Task ChangeApprovalStatus(int leaveRequestId, bool approved)
@@ -57,23 +67,33 @@ namespace LeaveManagementNet8.Application.Repositories
 
             if(approved)
             {
+                // Get the number of allocated days for this type of leave and for this employee
                 var allocation = await _leaveAllocationRepository.GetEmployeeAllocation(leaveRequest.RequestingEmployeeId, leaveRequest.LeaveTypeId);
-                int daysRequested = (int)(leaveRequest.EndDate - leaveRequest.StartDate).TotalDays;
+                double daysRequested = (double)(leaveRequest.EndDate - leaveRequest.StartDate).TotalDays + 1;
                 allocation.NumberOfDays -= daysRequested;
 
                 await _leaveAllocationRepository.UpdateAsync(allocation);
             }
             await UpdateAsync(leaveRequest);
 
+            // Get the employee's Id to send the Email
             var user = await _userManager.FindByIdAsync(leaveRequest.RequestingEmployeeId);
-            var approvalStatus = approved ? "Approved" : "Rejected";
 
-            await _emailSender.SendEmailAsync(user.Email, $"Leave Request {approvalStatus}", $"Your leave request from " +
-                $"{leaveRequest.StartDate} to {leaveRequest.EndDate} has been {approvalStatus}.");
+            // Set the properties that where not provided by the user
+            leaveRequest.LeaveType = await _leaveTypeRepository.GetAsync(leaveRequest.LeaveTypeId);
+
+            var approvalStatus = approved ? "Approuvée" : "Rejetée";
+
+            await _emailSender.SendEmailAsync(user.Email, $"Demande de {leaveRequest.LeaveType.Name} {approvalStatus}",
+                $"Votre demande de {leaveRequest.LeaveType.Name} du " +
+                $"{leaveRequest.StartDate.ToString("dd/MM/yyyy")} ({leaveRequest.StartTime})" +
+                $" au {leaveRequest.EndDate.ToString("dd/MM/yyyy")} ({leaveRequest.EndTime})" +
+                $" a été {approvalStatus}.");
         }
 
         public async Task<bool> CreateLeaveRequest(LeaveRequestCreateVM model)
         {
+            // Get the employee's info to allocate him the requested leave days
             var user = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User);
 
             var leaveAllocation = await _leaveAllocationRepository.GetEmployeeAllocation(user.Id, model.LeaveTypeId);
@@ -83,7 +103,7 @@ namespace LeaveManagementNet8.Application.Repositories
                 return false;
             }
 
-            int daysRequested = (int)(model.EndDate.Value - model.StartDate.Value).TotalDays;
+            double daysRequested = (double)(model.EndDate.Value - model.StartDate.Value).TotalDays + 1;
 
             if (daysRequested > leaveAllocation.NumberOfDays) 
             {
@@ -91,12 +111,19 @@ namespace LeaveManagementNet8.Application.Repositories
             }
 
             var leaveRequest = _mapper.Map<LeaveRequest>(model);
+
+            // Set the properties that where not provided by the user
             leaveRequest.DateModified = DateTime.UtcNow;
             leaveRequest.RequestingEmployeeId = user.Id;
+            leaveRequest.LeaveType = await _leaveTypeRepository.GetAsync(leaveRequest.LeaveTypeId);
+
             await AddAsync(leaveRequest);
 
-            await _emailSender.SendEmailAsync(user.Email, "Leave Request Submitted Successfully", $"Your leave request from " +
-                $"{leaveRequest.StartDate} to {leaveRequest.EndDate} has been submitted for approval.");
+            await _emailSender.SendEmailAsync(user.Email, $"Demande de {leaveRequest.LeaveType.Name} soumise pour approbation",
+                $"Votre demande de {leaveRequest.LeaveType.Name} du " +
+                $"{leaveRequest.StartDate.ToString("dd/MM/yyyy")} ({leaveRequest.StartTime})" +
+                $" au {leaveRequest.EndDate.ToString("dd/MM/yyyy")} ({leaveRequest.EndTime})" +
+                $" a été soumise pour approbation.");
 
             return true;
         }

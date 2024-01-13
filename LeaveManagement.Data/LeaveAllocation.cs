@@ -4,7 +4,7 @@ namespace LeaveManagementNet8.Data
 {
     public class LeaveAllocation : BaseEntity
     {
-        public int NumberOfDays { get; set; }
+        public double NumberOfDays { get; set; }
 
         [ForeignKey("LeaveTypeId")]
         public LeaveType LeaveType { get; set; }

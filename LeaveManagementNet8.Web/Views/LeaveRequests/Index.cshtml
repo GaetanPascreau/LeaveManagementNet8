@@ -5,7 +5,7 @@
 }
 
 
-<h1>Admin Leave Requests View</h1>
+<h1>Gestion des congés</h1>
 
 <div class="row">
     <div class="col-sm-3">
@@ -43,14 +43,14 @@
 </div>
 
 <hr />
-<h1>LeaveRequest Log</h1>
+<h1>Historique de demande des congés</h1>
 <hr />
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                Employee Name
+                Nom de l'employé'
             </th>
             <th>
                 @Html.DisplayNameFor(model => Model.LeaveRequests[0].StartDate)
@@ -91,25 +91,25 @@
             <td>
                 @if (item.Cancelled)
                 {
-                    <span class="badge bg-secondary">Cancelled</span> 
+                    <span class="badge bg-secondary">Annulé</span> 
                 }
                 else if (item.Approved == true)
                 {
-                    <span class="badge bg-success">Approved</span>
+                    <span class="badge bg-success">Approuvé</span>
                 }
                 else if (item.Approved == false)
                 {
-                    <span class="badge bg-danger">Rejected</span>
+                    <span class="badge bg-danger">Rejeté</span>
                 }
                 else
                 {
-                    <span class="badge bg-warning">Pending</span>
+                    <span class="badge bg-warning">En attente</span>
                 }
             </td>
             <td>
                 @if (item.Cancelled == false)
                 {
-                    <a asp-action="Details" class="btn btn-primary btn-sm" asp-route-id="@item.Id">Review</a>
+                    <a asp-action="Details" class="btn btn-primary btn-sm" asp-route-id="@item.Id">Détails</a>
                 }
             </td>
         </tr>

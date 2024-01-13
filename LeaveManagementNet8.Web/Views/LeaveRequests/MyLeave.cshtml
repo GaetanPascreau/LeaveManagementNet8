@@ -6,14 +6,14 @@
 
 <div class="card">
     <div class="card-header">
-        <h4>My Leave Allocations</h4>
+        <h4>Mes allocations de congés</h4>
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <div class="row">
-                <div class="col">Leave Name</div>
-                <div class="col">Original Allocation</div>
-                <div class="col">Current Allocation</div>
+                <div class="col">Type de congése</div>
+                <div class="col">Allocation originale (jours)</div>
+                <div class="col">Allocation actuelle (jours)</div>
             </div>
         </li>
         @foreach (var allocation in Model.LeaveAllocations)
@@ -25,12 +25,12 @@
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary">
-                            Allocated Days <span class="badge bg-secondary">@allocation.LeaveType.DefaultDays</span>
+                            Jours alloués <span class="badge bg-secondary">@allocation.LeaveType.DefaultDays</span>
                         </button>
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary">
-                            Remaining Days <span class="badge bg-secondary">@allocation.NumberOfDays</span>
+                            Jours restants <span class="badge bg-secondary">@allocation.NumberOfDays</span>
                         </button>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
 
 <hr />
 
-<h2>Current Requests</h2>
+<h2>Mes demandes de congés en cours</h2>
 <table class="table">
     <thead>
         <tr>
@@ -49,7 +49,13 @@
                 @Html.DisplayNameFor(model => model.LeaveRequests[0].StartDate)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.LeaveRequests[0].StartTime)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.LeaveRequests[0].EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveRequests[0].EndTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.LeaveRequests[0].LeaveType)
@@ -71,7 +77,13 @@
                     @Html.DisplayFor(modelItem => item.StartDate)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LeaveType.Name)
@@ -82,19 +94,19 @@
                 <td>
                     @if(item.Cancelled)
                     {
-                        <span class="badge bg-secondary">Cancelled</span>
+                        <span class="badge bg-secondary">Annulé</span>
                     }
                     else if(item.Approved == null)
                     {
-                        <span class="badge bg-warning">Pending</span>
+                        <span class="badge bg-warning">En attente</span>
                     }
                     else if(item.Approved.Value)
                     {
-                        <span class="badge bg-success">Approved</span>
+                        <span class="badge bg-success">Approuvé</span>
                     }
                     else if(item.Approved.Value == false)
                     {
-                        <span class="badge bg-danger">Rejected</span>
+                        <span class="badge bg-danger">Rejeté</span>
                     }
                 </td>
                  <td>
@@ -102,7 +114,7 @@
                     {
                         <form>
                             <input asp-form="@item.Id" type="hidden" />
-                            <button type="submit" class="btn btn-danger btn-sm">Cancel Request</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Annuler la demande</button>
                         </form>
                     }
                 </td>

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Apply For Leave";
 }
 
-<h1>Apply For Leave</h1>
+<h1>Demande de congés</h1>
 
 <hr />
 <div class="row">
@@ -14,7 +14,7 @@
             <div class="form-group">
                 <label asp-for="LeaveTypeId" class="control-label"></label>
                 <select asp-for="LeaveTypeId" class=" form-select" asp-items="Model.LeaveTypes">
-                    <option>Select Leave Type</option>
+                    <option>Sélectionner un type de congés</option>
                 </select>
                 <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
             </div>
@@ -29,11 +29,33 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label asp-for="StartTime" class="control-label"></label>
+                        <select asp-for="StartTime" class="form-select" id="StartTime">
+                            <option value="">Sélectionner l'heure de début</option>
+                            <option>matin</option>
+                            <option>après-midi</option>
+                        </select>
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label asp-for="EndDate" class="control-label"></label>
                         <input asp-for="EndDate" class="form-control datepicker" type="text" />
                         <span asp-validation-for="EndDate" class="text-danger"></span>
                     </div>
-                </div>   
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="EndTime" class="control-label"></label>
+                        <select asp-for="EndTime" class="form-select" id="StartTime">
+                            <option value="">Sélectionner l'heure de fin</option>
+                            <option>matin</option>
+                            <option>après-midi</option>
+                        </select>
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                    </div>
+                </div>
             </div>  
             <br />
             <div class="form-group">
@@ -43,7 +65,7 @@
             </div>
             <br />
             <div class="form-group">
-                <a class="btn btn-dark" asp-action="MyLeave">Cancel</a>  &nbsp;
+                <a class="btn btn-dark" asp-action="MyLeave">Annuler</a>  &nbsp;
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
