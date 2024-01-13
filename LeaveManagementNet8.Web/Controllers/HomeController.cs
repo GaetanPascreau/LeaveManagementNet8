@@ -33,7 +33,7 @@ namespace LeaveManagementNet8.Web.Controllers
             if (exceptionHandlerPathFeature != null)
             {
                 Exception exception = exceptionHandlerPathFeature.Error;
-                _logger.LogError(exception, $"Error Encountered By User : {this.User?.Identity?.Name} | Request Id : {requestId}");
+                _logger.LogError(exception, $"Erreur rencontrée par l'utilisateur : {this.User?.Identity?.Name} | Request Id : {requestId}");
             }
             return View(new ErrorViewModel { RequestId = requestId });
         }

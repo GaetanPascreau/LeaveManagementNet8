@@ -65,7 +65,7 @@ namespace LeaveManagementNet8.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error Approving Leave Request.");
+                _logger.LogError(ex, "Erreur lors de l'approbation de la demande.");
                 throw;
             }
 
@@ -82,7 +82,7 @@ namespace LeaveManagementNet8.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error Cancelling Leave Request.");
+                _logger.LogError(ex, "Erreur lors de l'annulation de la demande.");
                 throw;
             }
             return RedirectToAction(nameof(MyLeave));
@@ -115,13 +115,13 @@ namespace LeaveManagementNet8.Web.Controllers
                     {
                         return RedirectToAction(nameof(MyLeave));
                     }
-                    ModelState.AddModelError(string.Empty, "You have exceeded yopur allocation with this request.");
+                    ModelState.AddModelError(string.Empty, "Vous avez dépassé votre allocation avec cette demande.");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error Creating Leave Request.");
-                ModelState.AddModelError(string.Empty, "An Error Has Occured. Please Try Again Later.");
+                _logger.LogError(ex, "Erreur lors de la création de la demande.");
+                ModelState.AddModelError(string.Empty, "Une erreur s'est produite. Veuillez réessayer plus tard.");
             }
 
             model.LeaveTypes = new SelectList(_context.LeaveTypes, "Id", "Name", model.LeaveTypeId);
