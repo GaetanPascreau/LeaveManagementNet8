@@ -19,6 +19,12 @@ namespace LeaveManagementNet8.Common.Models
         [Display(Name = "Date d'embauche")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         [DataType(DataType.Date)]
-        public DateTime DateJoined {  get; set; }    
+        public DateTime DateJoined {  get; set; }
+
+        [Display(Name = "Superviseur")]
+        public string SupervisorId { get; set; }
+
+        [Display(Name = "Employeur")]
+        public string Employer { get; set; }
     }
 }

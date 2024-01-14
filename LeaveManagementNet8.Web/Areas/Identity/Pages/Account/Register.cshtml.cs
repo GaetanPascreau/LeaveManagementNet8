@@ -83,29 +83,37 @@ namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [Display(Name = "First Name")]
+            [Display(Name = "Prénom")]
             public string FirstName { get; set; }
 
             [Required]
-            [Display(Name = "Last Name")]
+            [Display(Name = "Nom")]
             public string LastName { get; set; }
 
             [DataType(DataType.Date)]
-            [Display(Name = "Date Of Birth")]
+            [Display(Name = "Date de naissance")]
             public DateTime DateOfBirth { get; set; }
 
             [DataType(DataType.Date)]
-            [Display(Name = "Date Joined")]
+            [Display(Name = "Date d'embauche")]
             public DateTime DateJoined { get; set; }
+
+            [Required]
+            [Display(Name = "Employeur")]
+            public string Employer { get; set; }
+
+            [Required(ErrorMessage = "Veuillez sélectionner un Superviseur.")]
+            [Display(Name = "Superviseur")]
+            public string SupervisorId { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "Le {0} doit comporter au minimum {2} et au maximum {1} caractères.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Mot de passe")]
             public string Password { get; set; }
 
             /// <summary>
@@ -113,8 +121,8 @@ namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirmation du mot de passe")]
+            [Compare("Password", ErrorMessage = "Le mot de passe et la confirmation du mot de passe ne sont pas identiques.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -139,6 +147,8 @@ namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
                 user.LastName = Input.LastName;
                 user.DateJoined = Input.DateJoined;
                 user.DateOfBirth = Input.DateOfBirth;
+                user.Employer = Input.Employer;
+                user.SupervisorId = Input.SupervisorId;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

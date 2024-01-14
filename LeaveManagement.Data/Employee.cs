@@ -13,5 +13,9 @@ namespace LeaveManagementNet8.Data
         public DateTime DateOfBirth { get; set; }
 
         public DateTime DateJoined { get; set; }
+
+        public string? SupervisorId { get; set; }
+
+        public string? Employer { get; set; }
     }
 }

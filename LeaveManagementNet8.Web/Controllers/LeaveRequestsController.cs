@@ -26,7 +26,7 @@ namespace LeaveManagementNet8.Web.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = Roles.Administrator)]
+        [Authorize(Roles = Roles.Administrator + "," + Roles.Supervisor)]
         // GET: LeaveRequests
         public async Task<IActionResult> Index()
         {
