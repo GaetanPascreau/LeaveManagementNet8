@@ -8,6 +8,8 @@ namespace LeaveManagementNet8.Data
 
         public string? LastName { get; set; }
 
+        public string? FullName { get; set; }
+
         public string? TaxId { get; set; }
 
         public DateTime DateOfBirth { get; set; }

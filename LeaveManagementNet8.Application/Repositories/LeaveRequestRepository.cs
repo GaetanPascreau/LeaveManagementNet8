@@ -19,6 +19,7 @@ namespace LeaveManagementNet8.Application.Repositories
         private readonly UserManager<Employee> _userManager;
         private readonly ILeaveAllocationRepository _leaveAllocationRepository;
         private readonly ILeaveTypeRepository _leaveTypeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailSender _emailSender;
 
         public LeaveRequestRepository(
@@ -29,6 +30,7 @@ namespace LeaveManagementNet8.Application.Repositories
             UserManager<Employee> userManager,
             ILeaveAllocationRepository leaveAllocationRepository,
             ILeaveTypeRepository leaveTypeRepository,
+            IEmployeeRepository employeeRepository,
             IEmailSender emailSender) : base(context)
         {
             _context = context;
@@ -38,6 +40,7 @@ namespace LeaveManagementNet8.Application.Repositories
             _userManager = userManager;
             _leaveAllocationRepository = leaveAllocationRepository;
             _leaveTypeRepository = leaveTypeRepository;
+            _employeeRepository = employeeRepository;
             _emailSender = emailSender;
         }
 
@@ -125,6 +128,15 @@ namespace LeaveManagementNet8.Application.Repositories
                 $" au {leaveRequest.EndDate.ToString("dd/MM/yyyy")} ({leaveRequest.EndTime})" +
                 $" a été soumise pour approbation.");
 
+            var supervisorId = user.SupervisorId;
+            var supervisor = await _employeeRepository.GetEmployeeByIdAsync(supervisorId);
+
+            await _emailSender.SendEmailAsync(supervisor.Email, $"Demande de {leaveRequest.LeaveType.Name} soumise pour approbation",
+                $"Une demande de {leaveRequest.LeaveType.Name} du " +
+                $"{leaveRequest.StartDate.ToString("dd/MM/yyyy")} ({leaveRequest.StartTime})" +
+                $" au {leaveRequest.EndDate.ToString("dd/MM/yyyy")} ({leaveRequest.EndTime})" +
+                $" a été soumise par {user.FirstName} {user.LastName} pour approbation.");
+
             return true;
         }
 
@@ -148,9 +160,46 @@ namespace LeaveManagementNet8.Application.Repositories
             return model;
         }
 
+        public async Task<AdminLeaveRequestViewVM> GetLeaveRequestBySupervisorId(string supervisorId)
+        {
+            // Get all employees associated to the Supervisor
+            var employees = await _employeeRepository.GetEmployeesBySupervisorId(supervisorId);
+
+            // Get all Leave Requests for these employees
+            var TeamleaveRequests = new List<LeaveRequestVM>();
+            var singleEmployeeRequests = new List<LeaveRequestVM>();
+
+            foreach (var employee in employees)
+            {
+                singleEmployeeRequests = await this.GetAllAsync(employee.Id);
+                TeamleaveRequests.AddRange(singleEmployeeRequests);
+            }
+
+            // Add statistics to the dashboard
+            var model = new AdminLeaveRequestViewVM
+            {
+                TotalRequests = TeamleaveRequests.Count,
+                ApprovedRequests = TeamleaveRequests.Count(q => q.Approved == true),
+                RejectedRequests = TeamleaveRequests.Count(q => q.Approved == false),
+                PendingRequests = TeamleaveRequests.Count(q => q.Approved == null),
+                LeaveRequests = TeamleaveRequests
+            };
+
+            // Get info from the requesting users
+            foreach (var leaveRequest in model.LeaveRequests)
+            {
+                leaveRequest.Employee = _mapper.Map<EmployeeListVM>(await _userManager.FindByIdAsync(leaveRequest.RequestingEmployeeId));
+            }
+
+            return model;
+
+        }
+
         public async Task<List<LeaveRequestVM>> GetAllAsync(string employeeId)
         {
-           return await _context.LeaveRequests.Where(q =>q.RequestingEmployeeId == employeeId)
+           return await _context.LeaveRequests
+                .Include(q => q.LeaveType)
+                .Where(q =>q.RequestingEmployeeId == employeeId)
                 .ProjectTo<LeaveRequestVM>(_configProvider)
                 .ToListAsync();
         }

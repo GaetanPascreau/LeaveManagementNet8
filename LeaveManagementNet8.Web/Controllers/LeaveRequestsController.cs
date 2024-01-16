@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LeaveManagementNet8.Application.Contracts;
+using LeaveManagementNet8.Application.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace LeaveManagementNet8.Web.Controllers
 {
@@ -13,31 +15,50 @@ namespace LeaveManagementNet8.Web.Controllers
     public class LeaveRequestsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILeaveRequestRepository _leaveRequestrepository;
+        private readonly ILeaveRequestRepository _leaveRequestRepository;
         private readonly ILogger<LeaveRequestsController> _logger;
+        private readonly UserManager<Employee> _userManager;
 
         public LeaveRequestsController(
             ApplicationDbContext context,
-            ILeaveRequestRepository leaveRequestrepository,
-            ILogger<LeaveRequestsController> logger)
+            ILeaveRequestRepository leaveRequestRepository,
+            ILogger<LeaveRequestsController> logger,
+            UserManager<Employee> userManager)
         {
             _context = context;
-            _leaveRequestrepository = leaveRequestrepository;
+            _leaveRequestRepository = leaveRequestRepository;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [Authorize(Roles = Roles.Administrator + "," + Roles.Supervisor)]
         // GET: LeaveRequests
         public async Task<IActionResult> Index()
         {
-            var model = await _leaveRequestrepository.GetAdminLeaveRequestList();
+
+            // Get info from the user
+            var user = await _userManager.GetUserAsync(User);
+
+            // if the User is the Admin, he gets all Leave Requests from all employees
+            // else (he is a Supervisor) he only gets the Leave Requests from the employees he supervises
+            var model = new AdminLeaveRequestViewVM();
+
+            if (user.UserName == "admin@localhost.com")
+            {
+                model = await _leaveRequestRepository.GetAdminLeaveRequestList();
+            }
+            else
+            {
+                model = await _leaveRequestRepository.GetLeaveRequestBySupervisorId(user.Id);
+            }
+
             return View(model);
         }
 
 
         public async Task<IActionResult> MyLeave()
         {
-            var model = await _leaveRequestrepository.GetMyLeavetDetails();
+            var model = await _leaveRequestRepository.GetMyLeavetDetails();
             return View(model);
         }
 
@@ -45,7 +66,7 @@ namespace LeaveManagementNet8.Web.Controllers
         // GET: LeaveRequests/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            var model = await _leaveRequestrepository.GetLeaveRequestAsync(id);
+            var model = await _leaveRequestRepository.GetLeaveRequestAsync(id);
             if (model == null)
             {
                 return NotFound();
@@ -61,7 +82,7 @@ namespace LeaveManagementNet8.Web.Controllers
         {
             try
             {
-                await _leaveRequestrepository.ChangeApprovalStatus(id, approved);
+                await _leaveRequestRepository.ChangeApprovalStatus(id, approved);
             }
             catch (Exception ex)
             {
@@ -78,7 +99,7 @@ namespace LeaveManagementNet8.Web.Controllers
         {
             try
             {
-                await _leaveRequestrepository.CancelLeaveRequest(id);
+                await _leaveRequestRepository.CancelLeaveRequest(id);
             }
             catch (Exception ex)
             {
@@ -110,7 +131,7 @@ namespace LeaveManagementNet8.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var isValidRequest = await _leaveRequestrepository.CreateLeaveRequest(model);
+                    var isValidRequest = await _leaveRequestRepository.CreateLeaveRequest(model);
                     if (isValidRequest)
                     {
                         return RedirectToAction(nameof(MyLeave));

@@ -43,7 +43,7 @@ namespace LeaveManagementNet8.Common.Models
 
             if (RequestComments?.Length > 250)
             {
-                yield return new ValidationResult("Le commentaire est rop long.",
+                yield return new ValidationResult("Le commentaire est trop long.",
                     new[] { nameof(RequestComments) });
             }
         }

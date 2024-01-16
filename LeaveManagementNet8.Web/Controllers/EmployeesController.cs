@@ -14,23 +14,40 @@ namespace LeaveManagementNet8.Web.Controllers
         private readonly IMapper _mapper;
         private readonly ILeaveAllocationRepository _leaveAllocationRepository;
         private readonly ILeaveTypeRepository _leaveTypeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
         public EmployeesController(
             UserManager<Employee> userManager,
             IMapper mapper,
             ILeaveAllocationRepository leaveAllocationRepository,
-            ILeaveTypeRepository leaveTypeRepository)
+            ILeaveTypeRepository leaveTypeRepository,
+            IEmployeeRepository employeeRepository)
         {
             _userManager = userManager;
             _mapper = mapper;
             _leaveAllocationRepository = leaveAllocationRepository;
             _leaveTypeRepository = leaveTypeRepository;
+            _employeeRepository = employeeRepository;
         }
 
         // GET: EmployeesController
         public async Task<IActionResult> Index()
         {
-            var employees = await _userManager.GetUsersInRoleAsync(Roles.User);
+            // Get info from the user
+            var user = await _userManager.GetUserAsync(User);
+
+            // If the User is the Admin, he can see all employees
+            // Else (if he is a Supervisor), he can can only see employees that he supervises
+            var employees = new List<Employee>();
+            if (user.UserName == "admin@localhost.com")
+            {
+                employees = (List<Employee>) await _userManager.GetUsersInRoleAsync(Roles.User);
+            }
+            else
+            {
+                employees = await _employeeRepository.GetEmployeesBySupervisorId(supervisorId : user.Id);
+            }
+
             var model = _mapper.Map<List<EmployeeListVM>>(employees);
             return View(model);
         }

@@ -35,6 +35,7 @@ namespace LeaveManagementNet8.Web
             builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
             builder.Services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
             builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             builder.Services.AddAutoMapper(typeof(MapperConfig));
 

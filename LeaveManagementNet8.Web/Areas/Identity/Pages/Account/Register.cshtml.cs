@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using LeaveManagementNet8.Common.Constants;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
 {
@@ -71,6 +72,12 @@ namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+
+        /// <summary>
+        ///     To add the list of Supervisors in the select.
+        /// </summary> 
+        public SelectList Supervisors { get; set; }
+
         public class InputModel
         {
             /// <summary>
@@ -124,6 +131,13 @@ namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirmation du mot de passe")]
             [Compare("Password", ErrorMessage = "Le mot de passe et la confirmation du mot de passe ne sont pas identiques.")]
             public string ConfirmPassword { get; set; }
+
+            /// <summary>
+            ///     Adding a property, to choose whether a User is also a Supervisor, using a checkbox
+            /// </summary>
+            [System.ComponentModel.Bindable(true)]
+            [System.ComponentModel.SettingsBindable(true)]
+            public bool IsSupervisor { get; set; }
         }
 
 
@@ -131,6 +145,11 @@ namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            // Get the list of employees with a role of Supervisor, to display them in a select
+            var supervisors = await _userManager.GetUsersInRoleAsync(Roles.Supervisor);
+           
+            Supervisors = new SelectList(supervisors, "Id", "FullName");
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -145,6 +164,7 @@ namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
+                user.FullName = Input.FirstName + " " + Input.LastName;
                 user.DateJoined = Input.DateJoined;
                 user.DateOfBirth = Input.DateOfBirth;
                 user.Employer = Input.Employer;
@@ -157,6 +177,12 @@ namespace LeaveManagementNet8.Web.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     await _userManager.AddToRoleAsync(user, Roles.User);
+
+                    // If the IsUser checkbox is checked, we also add a Supervisor role to that employee
+                    if (Input.IsSupervisor)
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Supervisor);
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

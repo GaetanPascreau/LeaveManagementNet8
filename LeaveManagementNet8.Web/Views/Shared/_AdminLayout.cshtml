@@ -227,6 +227,27 @@
                         }
 
                          @* Ajouter un if statement pour : la gestion du compte particuler du superviseur, et pour la gestion des congés de l'équipe par un Superviseur *@
+                        @if (User.IsInRole(Roles.Supervisor) && !User.IsInRole(Roles.Administrator))
+                        {
+                            // PART FOR THE TEAM MANAGEMENT
+                            <li class="sidebar-item" style="text-align:center">
+                                <hr />
+                                <span>Mon équipe</span>
+                                <hr />
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="Employees" asp-action="Index">
+                                    <i class="fa-solid fa-users"></i>&nbsp;&nbsp;
+                                    <span>Membres de l'équipe</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Index">
+                                    <i class="fa-solid fa-list-check"></i>&nbsp;&nbsp;
+                                    <span>Demandes de congés</span>
+                                </a>
+                            </li>
+                        }
 
                         @if (User.IsInRole(Roles.Administrator))
                         {
