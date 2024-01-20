@@ -103,7 +103,7 @@ namespace LeaveManagementNet8.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erreur lors de l'annulation de la demande.");
+                _logger.LogError(ex, "Erreur lors de l'annulation de la demande de congés.");
                 throw;
             }
             return RedirectToAction(nameof(MyLeave));

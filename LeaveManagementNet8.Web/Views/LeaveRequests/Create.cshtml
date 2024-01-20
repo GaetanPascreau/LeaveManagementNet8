@@ -23,7 +23,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="StartDate" class="control-label"></label>
-                        <input asp-for="StartDate" class="form-control datepicker" type="text" />
+                        <input asp-for="StartDate" class="form-control datepicker" type="text" id="StartDate" />
                         <span asp-validation-for="StartDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -38,17 +38,19 @@
                         <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="EndDate" class="control-label"></label>
-                        <input asp-for="EndDate" class="form-control datepicker" type="text" />
+                        <input asp-for="EndDate" class="form-control datepicker" type="text" id="EndDate"/>
                         <span asp-validation-for="EndDate" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="EndTime" class="control-label"></label>
-                        <select asp-for="EndTime" class="form-select" id="StartTime">
+                        <select asp-for="EndTime" class="form-select" id="EndTime">
                             <option value="">Sélectionner l'heure de fin</option>
                             <option>matin</option>
                             <option>après-midi</option>
@@ -64,6 +66,11 @@
                 <span asp-validation-for="RequestComments" class="text-danger"></span>
             </div>
             <br />
+            <div>
+                <label for="NumDays">Nombre de jours : </label>
+                <span id="NumDays"></span>
+            </div>
+            <br />
             <div class="form-group">
                 <a class="btn btn-dark" asp-action="MyLeave">Annuler</a>  &nbsp;
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -71,3 +78,91 @@
         </form>
     </div>
 </div>
+
+<script>
+    // Get references for the entry fields and for the field displaying the number of days
+    let leaveDays = 0;
+    const StartDateInput = document.getElementById('StartDate');
+    const StartTimeInput = document.getElementById('StartTime');
+    const EndDateInput = document.getElementById('EndDate');
+    const EndTimeInput = document.getElementById('EndTime');
+    const NumDaysSpan = document.getElementById('NumDays');
+
+    // List of Holidays for the current year. NB : write days and months numbers without 0 at the begining in the format : 'mm/dd/yy'
+    const holidays = [
+        '1/1/2024',   // jour de l'an
+        '4/1/2024',   // lundi de Pâques
+        '5/1/2024',   // Fête du travail
+        '5/8/2024',   // Armistice 1945
+        '5/9/2024',   // jeudi de l'Ascension
+        '5/20/2024',   // lundi de Pentcôte
+        '7/14/2024',   // Fête nationale
+        '8/15/2024',   // Assomption
+        '11/1/2024',   // Toussaint
+        '11/11/2024',   // Armistice 1918
+        '12/25/2024'    // Noël
+    ]
+
+    // Add event listeners
+    StartDateInput.addEventListener('blur', calculateDays);
+    StartTimeInput.addEventListener('change', calculateDays);
+    EndDateInput.addEventListener('blur', calculateDays);
+    EndTimeInput.addEventListener('change', calculateDays);
+
+    function isHoliday(date) {
+        const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+        console.log('is holiday : ' + formattedDate); // write days and months without the 0 at the begining
+        return holidays.includes(formattedDate);
+    }
+
+    function calculateDays() {
+        console.log('Fonction calculateDays() appelée');
+        leaveDays = 0;
+
+        // Get the selected days and Times
+        const StartDateValue = StartDateInput.value; // provide a dd-mm-yyyy format
+        const StartTimeValue = StartTimeInput.value;
+        const EndDateValue = EndDateInput.value;
+        const EndTimeValue = EndTimeInput.value;
+
+        // controls
+        console.log('Date de début entrée:', StartDateValue);
+        console.log('Heure de début entrée:', StartTimeValue);
+        console.log('Date de fin entrée:', EndDateValue);
+        console.log('Heure de fin entrée:', EndTimeValue);
+
+        // Check that all necessary values are selected before calculation
+        if (StartDateValue && StartTimeValue && EndDateValue && EndTimeValue) {
+            console.log('toutes les valeurs sont sélectionnées !');
+            // Convert strings in Date objects, in the MM/dd/yyyy format
+            var startDateArray = StartDateValue.split("-");
+            var startDateArrayFormatted = startDateArray[1] + '/' + startDateArray[0] + '/' + startDateArray[2];
+            var endDateArray = EndDateValue.split("-");
+            var endDateArrayFormatted = endDateArray[1] + '/' + endDateArray[0] + '/' + endDateArray[2];
+            const startDate = new Date(startDateArrayFormatted);
+            const endDate = new Date(endDateArrayFormatted);
+            console.log(startDate);
+            console.log(endDate);
+
+            // Calculate the number of days taking week-ends and holidays into account
+            for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+                console.log('calcul du nombre de jours');
+                if (date.getDay() !== 6 && date.getDay() !== 0 && !isHoliday(date)) {
+                    leaveDays++;
+                }
+            }
+        }
+        console.log('Jours de congés sans les demies-journées = ' + leaveDays);
+
+        // Take half-days into account
+        if (StartTimeValue === "après-midi") {
+            leaveDays -= 0.5;
+        }
+        if (EndTimeValue === "matin") {
+            leaveDays -= 0.5;
+        }
+        console.log('Jours de congés avec les demies-journées = ' + leaveDays);
+
+        NumDaysSpan.textContent = leaveDays.toString(); // That's OK if we enter times at the end (not dates)
+    }
+</script>

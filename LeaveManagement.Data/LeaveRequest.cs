@@ -27,5 +27,7 @@ namespace LeaveManagementNet8.Data
 
         public string RequestingEmployeeId { get; set; }
 
+        public double RequestedDaysNumber { get; set; }
+
     }
 }

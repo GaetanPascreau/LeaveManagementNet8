@@ -58,6 +58,9 @@
                 @Html.DisplayNameFor(model => model.LeaveRequests[0].EndTime)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.LeaveRequests[0].RequestedDaysNumber)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.LeaveRequests[0].LeaveType)
             </th>
             <th>
@@ -86,6 +89,9 @@
                     @Html.DisplayFor(modelItem => item.EndTime)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.RequestedDaysNumber)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.LeaveType.Name)
                 </td>
                 <td>
@@ -110,10 +116,10 @@
                     }
                 </td>
                  <td>
-                     @if(item.Approved == null)
+                     @if(item.Approved == null && item.Cancelled == false)
                     {
-                        <form>
-                            <input asp-form="@item.Id" type="hidden" />
+                        <form asp-action="Cancel">
+                            <input asp-for="@item.Id" name="id" type="hidden" />
                             <button type="submit" class="btn btn-danger btn-sm">Annuler la demande</button>
                         </form>
                     }

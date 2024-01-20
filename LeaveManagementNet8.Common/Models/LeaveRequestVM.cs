@@ -11,6 +11,7 @@ namespace LeaveManagementNet8.Common.Models
         [DataType(DataType.Date)]
         public DateTime DateRequested { get; set; }
 
+
         [Display(Name = "Type de congés")]
         public LeaveTypeVM LeaveType { get; set; }
 
@@ -23,5 +24,8 @@ namespace LeaveManagementNet8.Common.Models
         public string? RequestingEmployeeId { get; set; }
 
         public EmployeeListVM Employee { get; set; }
+
+        [Display(Name ="Nombre de jours")]
+        public double RequestedDaysNumber { get; set; }
     }
 }

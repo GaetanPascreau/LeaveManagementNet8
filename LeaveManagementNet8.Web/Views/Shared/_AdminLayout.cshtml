@@ -1,5 +1,7 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using System.Security.Claims
+﻿@using LeaveManagementNet8.Data;
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+
 @inject SignInManager<Employee> SignInManager
 @inject UserManager<Employee> UserManager
 
@@ -211,7 +213,6 @@
                         </li>
                         @if (User.IsInRole(Roles.User) && !User.IsInRole(Roles.Supervisor))
                         {
-
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Create">
                                     <i class="fa-solid fa-pencil"></i>
@@ -226,13 +227,30 @@
                             </li>
                         }
 
-                         @* Ajouter un if statement pour : la gestion du compte particuler du superviseur, et pour la gestion des congés de l'équipe par un Superviseur *@
                         @if (User.IsInRole(Roles.Supervisor) && !User.IsInRole(Roles.Administrator))
                         {
+                            // PART FOR THE SUPERVISOR'S PERSONAL ACCOUNT MANAGEMENT'
+                            <li class="sidebar-item" style="text-align:center">
+                                <hr />
+                                <span class="align-items-center">Mon compte</span>
+                                <hr />
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Create">
+                                    <i class="fas fa-pen-alt"></i>&nbsp;&nbsp;
+                                    <span>Poser des congés</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="MyLeave">
+                                    <i class="fas fa-person-walking-arrow-right"></i>&nbsp;&nbsp;
+                                    <span>Mes congés</span>
+                                </a>
+                            </li>
                             // PART FOR THE TEAM MANAGEMENT
                             <li class="sidebar-item" style="text-align:center">
                                 <hr />
-                                <span>Mon équipe</span>
+                                <span class="align-items-center">Mon équipe</span>
                                 <hr />
                             </li>
                             <li class="sidebar-item">
@@ -306,6 +324,7 @@
     <script src="~/lib/sweetalert/sweetalert.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!--added to display a datepicker in French-->
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
     <!--Wave Effects -->
@@ -319,14 +338,23 @@
     @* <script src="~/js/pages/dashboards/dashboard1.js"></script> *@
     
     <script>
-        $(function () {
-            // new DataTable('.table');
-            $(".table").DataTable();
+        // $(function () {
+        //     // new DataTable('.table');
+        //     $(".table").DataTable();
+        //     $(".datepicker").datepicker({
+        //         dateFormat: "yy-mm-dd"
+        //     });
+        // });
+        $(document).ready(function () {
             $(".datepicker").datepicker({
-                dateFormat: "yy-mm-dd"
+                firstDay: 1,
+                dateFormat: "dd-mm-yy",
+                dayNamesMin: ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
+                monthNames: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
             });
         });
     </script>
+    <script src="https://kit.fontawesome.com/a56dbf7520.js" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

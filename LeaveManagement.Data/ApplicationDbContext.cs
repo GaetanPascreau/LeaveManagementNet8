@@ -21,11 +21,12 @@ namespace LeaveManagementNet8.Data
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in base.ChangeTracker.Entries<BaseEntity>().Where(q => q.State == EntityState.Added || q.State == EntityState.Modified))
+            foreach (var entry in base.ChangeTracker.Entries<BaseEntity>()
+                .Where(q => q.State == EntityState.Added || q.State == EntityState.Modified))
             {
                 entry.Entity.DateModified = DateTime.UtcNow;
 
-                if(entry.State == EntityState.Added)
+                if (entry.State == EntityState.Added)
                 {
                     entry.Entity.DateCreated = DateTime.UtcNow;
                 }            
