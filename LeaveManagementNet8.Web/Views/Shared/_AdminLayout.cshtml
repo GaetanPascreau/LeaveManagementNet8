@@ -22,10 +22,10 @@
     <title>@ViewData["Title"] - Gestion des congés</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" asp-append-version="true">  <!--ajouté pour afficher un datepicker en Français-->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  <!--ajouté pour afficher un datepicker en Français-->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeaveManagementNet8.Web.styles.css" asp-append-version="true" />
 
@@ -137,7 +137,7 @@
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
-                    </ul> *@
+                    </ul>*@
                 </div>
             </nav>
         </header>
@@ -216,12 +216,14 @@
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Create">
                                     <i class="fa-solid fa-pencil"></i>
+                                    &nbsp;&nbsp;
                                     <span>Poser des congés</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="MyLeave">
-                                    <i class="fa-regular fa-file-lines"></i>
+                                    <i class="fas fa-person-walking-arrow-right"></i>
+                                    &nbsp;&nbsp;
                                     <span>Mes congés</span>
                                 </a>
                             </li>
@@ -230,61 +232,67 @@
                         @if (User.IsInRole(Roles.Supervisor) && !User.IsInRole(Roles.Administrator))
                         {
                             // PART FOR THE SUPERVISOR'S PERSONAL ACCOUNT MANAGEMENT'
-                            <li class="sidebar-item" style="text-align:center">
+                            <li class="sidebar-item bg-secondary text-white" style="text-align:center">
                                 <hr />
                                 <span class="align-items-center">Mon compte</span>
                                 <hr />
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Create">
-                                    <i class="fas fa-pen-alt"></i>&nbsp;&nbsp;
+                                    <i class="fas fa-pen-alt"></i>
+                                    &nbsp;&nbsp;
                                     <span>Poser des congés</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="MyLeave">
-                                    <i class="fas fa-person-walking-arrow-right"></i>&nbsp;&nbsp;
+                                    <i class="fas fa-person-walking-arrow-right"></i>
+                                    &nbsp;&nbsp;
                                     <span>Mes congés</span>
                                 </a>
                             </li>
                             // PART FOR THE TEAM MANAGEMENT
-                            <li class="sidebar-item" style="text-align:center">
+                            <li class="sidebar-item bg-secondary text-white" style="text-align:center">
                                 <hr />
                                 <span class="align-items-center">Mon équipe</span>
                                 <hr />
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="Employees" asp-action="Index">
-                                    <i class="fa-solid fa-users"></i>&nbsp;&nbsp;
+                                    <i class="fa-solid fa-users"></i>
+                                    &nbsp;&nbsp;
                                     <span>Membres de l'équipe</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Index">
-                                    <i class="fa-solid fa-list-check"></i>&nbsp;&nbsp;
+                                    <i class="fa-solid fa-list-check"></i>
+                                    &nbsp;&nbsp;
                                     <span>Demandes de congés</span>
                                 </a>
                             </li>
                         }
 
                         @if (User.IsInRole(Roles.Administrator))
-                        {
-                            
+                        {        
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="Employees" asp-action="Index">
                                     <i class="fa-solid fa-users"></i>
+                                    &nbsp;&nbsp;
                                     <span>Employés</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveTypes" asp-action="Index">
                                     <i class="fa-solid fa-gears"></i>
+                                    &nbsp;&nbsp;
                                     <span>Types de congés</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="LeaveRequests" asp-action="Index">
                                     <i class="fa-solid fa-list-check"></i>
+                                    &nbsp;&nbsp;
                                     <span>Demandes de congés</span>
                                 </a>
                             </li>
@@ -322,10 +330,11 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/sweetalert/sweetalert.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> 
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> <!--added to display a datepicker in French-->
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!--added to display a datepicker in French-->
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+   
 
     <!--Wave Effects -->
     <script src="~/js/waves.js"></script>
@@ -345,7 +354,9 @@
         //         dateFormat: "yy-mm-dd"
         //     });
         // });
+
         $(document).ready(function () {
+            $('.table').DataTable();
             $(".datepicker").datepicker({
                 firstDay: 1,
                 dateFormat: "dd-mm-yy",

@@ -35,7 +35,7 @@
                 <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pencil"></i></a> &nbsp;
                 <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> &nbsp;
               @*<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger deleteBtn">Delete</a> *@ 
-                <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"><i class="fa-regular fa-trash-can"></i></button>
+                <button data-id="@item.Id" class="btn btn-danger text-white deleteBtn" type="button"><i class="fa-regular fa-trash-can"></i></button>
             </td>
         </tr>
 }
@@ -53,6 +53,7 @@
 @section Scripts{
     <script>
         $(function () {
+            //$('.table').DataTable();
             $('.deleteBtn').click(function (e) {
                 swal({
                     title: "Etes-vous sûr ?",

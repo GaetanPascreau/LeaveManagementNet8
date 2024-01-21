@@ -5,15 +5,15 @@
 
 
 <div class="card">
-    <div class="card-header">
-        <h4>Mes allocations de congés</h4>
+    <div class="card-header bg-orange text-white">
+        <h2>Mes allocations de congés</h2>
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <div class="row">
-                <div class="col">Type de congés</div>
-                <div class="col">Allocation originale (jours)</div>
-                <div class="col">Allocation actuelle (jours)</div>
+                <div class="col"><h5>Type de congés</h5></div>
+                <div class="col"><h5>Allocation originale (jours)</h5></div>
+                <div class="col"><h5>Allocation actuelle (jours)</h5></div>
             </div>
         </li>
         @foreach (var allocation in Model.LeaveAllocations)
@@ -21,16 +21,20 @@
             <li class="list-group-item">
                 <div class="row">
                     <div class="col">
-                        <h6>@allocation.LeaveType.Name</h6>
+                        @allocation.LeaveType.Name
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary">
-                            Jours alloués <span class="badge bg-secondary">@allocation.LeaveType.DefaultDays</span>
+                            Jours alloués
+                            &nbsp;
+                            <span class="badge bg-dark">@allocation.LeaveType.DefaultDays</span>
                         </button>
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary">
-                            Jours restants <span class="badge bg-secondary">@allocation.NumberOfDays</span>
+                            Jours restants 
+                            &nbsp;
+                            <span class="badge bg-dark">@allocation.NumberOfDays</span>
                         </button>
                     </div>
                 </div>
@@ -40,8 +44,9 @@
 </div>
 
 <hr />
-
-<h2>Mes demandes de congés en cours</h2>
+<div class="card-header bg-cyan text-white">
+    <h2>Mes demandes de congés en cours</h2>
+</div>
 <table class="table">
     <thead>
         <tr>

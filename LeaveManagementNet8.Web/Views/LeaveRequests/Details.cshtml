@@ -27,7 +27,7 @@
     <h4 class="alert-heading">@headingText</h4>
     <hr />
     <p>
-        <strong>Nom de l'employé' : </strong>@Model.Employee.FirstName @Model.Employee.LastName
+        <strong>Nom de l'employé : </strong>@Model.Employee.FirstName @Model.Employee.LastName
     </p>
     <hr />
     <p>
@@ -82,20 +82,23 @@
         </dd>
     </dl>
 </div>
-<div>
+<div class="d-inline-flex">
     @if(Model.Approved == null)
     {
-        <form asp-action="ApproveRequest">
-            <input name="Id" value="@Model.Id" type="hidden" />
-            <input name="approved" type="hidden" value="true" />
-            <button type="submit" class="btn btn-success">Approuver</button>
-        </form>
-        <form asp-action="ApproveRequest">
-            <input name="Id" value="@Model.Id" type="hidden" />
-            <input name="approved" type="hidden" value="false" />
-            <button type="submit" class="btn btn-danger">Rejeter</button>
-        </form>
+        <div class="d-inline-flex">
+            <form asp-action="ApproveRequest">
+                <input name="Id" value="@Model.Id" type="hidden" />
+                <input name="approved" type="hidden" value="true" />
+                <button type="submit" class="btn btn-success text-white">Approuver</button>
+            </form>
+            &nbsp; &nbsp;
+            <form asp-action="ApproveRequest">
+                <input name="Id" value="@Model.Id" type="hidden" />
+                <input name="approved" type="hidden" value="false" />
+                <button type="submit" class="btn btn-danger text-white">Rejeter</button>
+            </form>
+        </div>
     }
-    
+    &nbsp; &nbsp;
     <a class="btn btn-dark" asp-action="Index">Retour à la liste</a>
 </div>

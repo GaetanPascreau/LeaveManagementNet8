@@ -7,7 +7,7 @@ namespace LeaveManagementNet8.Common.Models
     {
         [Required]
         [Display(Name = "Date de début")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         [DataType(DataType.Date)]
         public DateTime? StartDate { get; set; }
 
@@ -17,7 +17,7 @@ namespace LeaveManagementNet8.Common.Models
 
         [Required]
         [Display(Name = "Date de fin")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
 

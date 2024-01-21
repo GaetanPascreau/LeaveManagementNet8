@@ -7,7 +7,7 @@ namespace LeaveManagementNet8.Common.Models
         public int Id { get; set; }
 
         [Display(Name = "Date de la demande")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         [DataType(DataType.Date)]
         public DateTime DateRequested { get; set; }
 
